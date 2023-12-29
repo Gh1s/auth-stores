@@ -1,0 +1,234 @@
+## logLevel ##
+#
+# Configures the log level.
+#
+# Set this value using environment variables on
+# - Linux/macOS:
+#   $ export LOGLEVEL=<value>
+# - Windows Command Line (CMD):
+#   > set LOGLEVEL=<value>
+logLevel: info
+
+## listen ##
+#
+# Configures the server listening.
+#
+listen:
+  ## protocol ##
+  #
+  # Sets the listening protocol.
+  #
+  # Set this value using environment variables on
+  # - Linux/macOS:
+  #   $ export LISTEN_PROTOCOL=<value>
+  # - Windows Command Line (CMD):
+  #   > set LISTEN_PROTOCOL=<value>
+  protocol: tcp
+  ## port ##
+  #
+  # Sets the listening port.
+  #
+  # Set this value using environment variables on
+  # - Linux/macOS:
+  #   $ export LISTEN_PORT=<value>
+  # - Windows Command Line (CMD):
+  #   > set LISTEN_PORT=<value>
+  port: 443
+  ## tls ##
+  #
+  # Configures the TLS termination.
+  #
+  tls:
+    ## cert ##
+    #
+    # Sets the certificate file path.
+    #
+    # Set this value using environment variables on
+    # - Linux/macOS:
+    #   $ export LISTEN_TLS_CERT=<value>
+    # - Windows Command Line (CMD):
+    #   > set LISTEN_TLS_CERT=<value>
+    cert: ""
+    ## key ##
+    #
+    # Sets the private key file path.
+    #
+    # Set this value using environment variables on
+    # - Linux/macOS:
+    #   $ export LISTEN_TLS_KEY=<value>
+    # - Windows Command Line (CMD):
+    #   > set LISTEN_TLS_KEY=<value>
+    key: ""
+
+## ldap ##
+#
+# Configures the LDAP connection & dependencies.
+#
+ldap:
+  ## protocol ##
+  #
+  # Sets the LDAP connection protocol.
+  #
+  # Set this value using environment variables on
+  # - Linux/macOS:
+  #   $ export LDAP_PROTOCOL=<value>
+  # - Windows Command Line (CMD):
+  #   > set LDAP_PROTOCOL=<value>
+  protocol: tcp
+  ## tls ##
+  #
+  # Defines if the TLS is enabled.
+  #
+  tls:
+    ## enabled ##
+    #
+    # Defines if the TLS is enabled.
+    #
+    # Set this value using environment variables on
+    # - Linux/macOS:
+    #   $ export LDAP_TLS_ENABLED=<value>
+    # - Windows Command Line (CMD):
+    #   > set LDAP_TLS_ENABLED=<value>
+    enabled: true
+    ## rootCAs ##
+    #
+    # Sets the LDAP root certificate authorities.
+    #
+    # Set this value using environment variables on
+    # - Linux/macOS:
+    #   $ export LDAP_TLS_ROOTCAS=<value>
+    # - Windows Command Line (CMD):
+    #   > set LDAP_TLS_ROOTCAS=<value>
+    rootCAs: []
+    ## insecureSkipVerify ##
+    #
+    # Defines if the certificate validation should be skipped.
+    #
+    # Set this value using environment variables on
+    # - Linux/macOS:
+    #   $ export LDAP_TLS_INSECURESKIPVERIFY=<value>
+    # - Windows Command Line (CMD):
+    #   > set LDAP_TLS_INSECURESKIPVERIFY=<value>
+    insecureSkipVerify: true
+  ## server ##
+  #
+  # Sets the LDAP server address.
+  #
+  # Set this value using environment variables on
+  # - Linux/macOS:
+  #   $ export LDAP_SERVER=<value>
+  # - Windows Command Line (CMD):
+  #   > set LDAP_SERVER=<value>
+  server: ldaps.csb.nc
+  ## port ##
+  #
+  # Sets the LDAP server port.
+  #
+  # Set this value using environment variables on
+  # - Linux/macOS:
+  #   $ export LDAP_PORT=<value>
+  # - Windows Command Line (CMD):
+  #   > set LDAP_PORT=<value>
+  port: 636
+  ## container ##
+  #
+  # Sets the LDAP container to search for users.
+  #
+  # Set this value using environment variables on
+  # - Linux/macOS:
+  #   $ export LDAP_CONTAINER=<value>
+  # - Windows Command Line (CMD):
+  #   > set LDAP_CONTAINER=<value>
+  container: OU=AADDC Users,DC=csb,DC=nc
+
+  ## username ##
+  #
+  # Sets the username of the account used to open the LDAP connection.
+  # This setting must never be defined in a configuration file, use an environment variable.
+  #
+  # Set this value using environment variables on
+  # - Linux/macOS:
+  #   $ export LDAP_USERNAME=<value>
+  # - Windows Command Line (CMD):
+  #   > set LDAP_USERNAME=<value>
+  username: ""
+
+  ## password ##
+  #
+  # Sets the password of the account used to open LDAP connection.
+  # This setting must never be defined in a configuration file, use an environment variable.
+  #
+  # Set this value using environment variables on
+  # - Linux/macOS:
+  #   $ export TEST_LDAP_PASSWORD=<value>
+  # - Windows Command Line (CMD):
+  #   > set TEST_LDAP_PASSWORD=<value>
+  password: ""
+
+  ## attributes ##
+  #
+  # Configures LDAP attributes conversion rules.
+  #
+  # Set these values using environment variables on
+  # - Linux/macOS:
+  #   $ export LDAP_ATTRIBUTES_<attribute_name>=<value>
+  # - Windows Command Line (CMD):
+  #   > set LDAP_ATTRIBUTES_<attribute_name>=<value>
+  attributes:
+    objectGUID: guid
+    sAMAccountName: string
+    givenName: string
+    sn: string
+    displayName: string
+    mail: string
+    telephoneNumber: string
+    userAccountControl: string
+
+  ## claims ##
+  #
+  # Configures claims mapping from LDAP attributes.
+  #
+  claims:
+    ## mapping ##
+    #
+    # Sets claims to LDAP attributes mapping.
+    #
+    # Set these values using environment variables on
+    # - Linux/macOS:
+    #   $ export LDAP_CLAIMS_MAPPING_<claim_name>=<value>
+    # - Windows Command Line (CMD):
+    #   > set LDAP_CLAIMS_MAPPING_<claim_name>=<value>
+    mapping:
+      sub: objectGUID
+      preferred_username: sAMAccountName
+      given_name: givenName
+      family_name: sn
+      name: displayName
+      email: mail
+      phone_number: telephoneNumber
+    ## children ##
+    #
+    # Sets claims values for children claims. Those that must be present if there parent are.
+    #
+    # Set these values using environment variables on
+    # - Linux/macOS:
+    #   $ export LDAP_CLAIMS_CHILDREN__<claim_name>_NAME=<value>
+    #   $ export LDAP_CLAIMS_CHILDREN__<claim_name>_VALUE=<value>
+    # - Windows Command Line (CMD):
+    #   > set LDAP_CLAIMS_CHILDREN__<claim_name>_NAME=<value>
+    #   > set LDAP_CLAIMS_CHILDREN__<claim_name>_VALUE=<value>
+    children:
+      ## email ##
+      #
+      # The email_verified claim must be present if the email claims is.
+      #
+      email:
+        name: email_verified
+        value: "True"
+      ## phone_number ##
+      #
+      # The phone_number_verified claim must be present if the phone_number claims is.
+      #
+      phone_number:
+        name: phone_number_verified
+        value: "True"

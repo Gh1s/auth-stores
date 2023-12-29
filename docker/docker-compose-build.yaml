@@ -1,0 +1,29 @@
+# This script can be used to start build the stores Docker images.
+
+version: '3.8'
+
+services:
+
+  grpc-ldap:
+    build:
+      # You can override the build context (where the source code of the stores is) by defining a BUILD_CONTEXT environment variable.
+      context: ${BUILD_CONTEXT:-../}
+      dockerfile: Dockerfile
+      args:
+        # Make sure that you have defined the HTTP_PROXY environment variable on your host.
+        - HTTP_PROXY=$HTTP_PROXY
+        - HTTPS_PROXY=$HTTP_PROXY
+        - STORE=ldap
+    image: ${REGISTRY:-gcr.io/csb-anthos}/${GRPC_LDAP_REPOSITORY:-auth/stores/ldap}:${GRPC_LDAP_TAG:-latest}
+
+  grpc-accounts:
+    build:
+      # You can override the build context (where the source code of the stores is) by defining a BUILD_CONTEXT environment variable.
+      context: ${BUILD_CONTEXT:-../}
+      dockerfile: Dockerfile
+      args:
+        # Make sure that you have defined the HTTP_PROXY environment variable on your host.
+        - HTTP_PROXY=$HTTP_PROXY
+        - HTTPS_PROXY=$HTTP_PROXY
+        - STORE=accounts
+    image: ${REGISTRY:-gcr.io/csb-anthos}/${GRPC_ACCOUNTS_REPOSITORY:-auth/stores/accounts}:${GRPC_ACCOUNTS_TAG:-latest}

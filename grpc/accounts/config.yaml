@@ -1,0 +1,61 @@
+## logLevel ##
+#
+# Configures the log level.
+#
+# Set this value using environment variables on
+# - Linux/macOS:
+#   $ export LOGLEVEL=<value>
+# - Windows Command Line (CMD):
+#   > set LOGLEVEL=<value>
+logLevel: info
+
+## listen ##
+#
+# Configures the server listening.
+#
+listen:
+  ## protocol ##
+  #
+  # Sets the listening protocol.
+  #
+  # Set this value using environment variables on
+  # - Linux/macOS:
+  #   $ export LISTEN_PROTOCOL=<value>
+  # - Windows Command Line (CMD):
+  #   > set LISTEN_PROTOCOL=<value>
+  protocol: tcp
+  ## port ##
+  #
+  # Sets the listening port.
+  #
+  # Set this value using environment variables on
+  # - Linux/macOS:
+  #   $ export LISTEN_PORT=<value>
+  # - Windows Command Line (CMD):
+  #   > set LISTEN_PORT=<value>
+  port: 443
+  ## tls ##
+  #
+  # Configures the TLS termination.
+  #
+  tls:
+    ## cert ##
+    #
+    # Sets the certificate file path.
+    #
+    # Set this value using environment variables on
+    # - Linux/macOS:
+    #   $ export LISTEN_TLS_CERT=<value>
+    # - Windows Command Line (CMD):
+    #   > set LISTEN_TLS_CERT=<value>
+    cert: ""
+    ## key ##
+    #
+    # Sets the private key file path.
+    #
+    # Set this value using environment variables on
+    # - Linux/macOS:
+    #   $ export LISTEN_TLS_KEY=<value>
+    # - Windows Command Line (CMD):
+    #   > set LISTEN_TLS_KEY=<value>
+    key: ""

@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "grpc-ldap.fullname" . }}-config
+  labels:
+    {{- include "grpc-ldap.labels" . | nindent 4 }}
+data:
+  config.{{ .Values.environment }}.yaml: |
+    logLevel: {{ .Values.grpc.logLevel }}
+    listen:
+      protocol: {{ .Values.grpc.listen.protocol }}
+      port: {{ .Values.grpc.listen.port }}
+      tls:
+        cert: {{ .Values.grpc.listen.tls.cert }}
+        key: {{ .Values.grpc.listen.tls.key }}
+    ldap:
+      protocol: {{ .Values.grpc.ldap.protocol }}
+      tls:
+        enabled: {{ .Values.grpc.ldap.tls.enabled }}
+        rootCAs: {{ .Values.grpc.ldap.tls.rootCAs }}
+        insecureSkipVerify: {{ .Values.grpc.ldap.tls.insecureSkipVerify }}
+      server: {{ .Values.grpc.ldap.server }}
+      port: {{ .Values.grpc.ldap.port }}
+      container: {{ .Values.grpc.ldap.port }}

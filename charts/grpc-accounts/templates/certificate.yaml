@@ -1,0 +1,21 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "grpc-accounts.fullname" . }}
+  labels:
+    {{- include "grpc-accounts.labels" . | nindent 4 }}
+spec:
+  secretName: {{ include "grpc-accounts.fullname" . }}-tls
+  duration: {{ .Values.secrets.tls.duration }}
+  renewBefore: {{ .Values.secrets.tls.renewBefore }}
+  subject: {{ .Values.secrets.tls.subject | toYaml | nindent 4 }}
+  commonName: {{ include "grpc-accounts.fullname" . }}
+  isCA: false
+  dnsNames:
+    - {{ include "grpc-accounts.fullname" . }}
+  privateKey:
+    rotationPolicy: Always
+    algorithm: RSA
+    encoding: PKCS1
+    size: 2048
+  issuerRef: {{ .Values.secrets.tls.issuerRef | toYaml | nindent 4 }}

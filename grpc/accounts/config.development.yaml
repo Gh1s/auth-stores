@@ -1,0 +1,7 @@
+logLevel: debug
+
+listen:
+  port: 5600
+  tls:
+    cert: "../../certs/tls.crt"
+    key: "../../certs/tls.key"

@@ -1,0 +1,6 @@
+apiVersion: v2
+name: grpc-accounts
+description: Deploys the gRPC accounts
+type: application
+version: 1.0.0
+appVersion: "v1.0.0"

@@ -1,0 +1,93 @@
+environment: "staging"
+replicaCount: 2
+
+image:
+  repository: gcr.io/csb-anthos/auth/stores/accounts
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  # tag: "latest"
+
+imagePullSecrets: []
+nameOverride: "grpc-accounts"
+fullnameOverride: "grpc-accounts"
+
+grpc:
+  logLevel: "info"
+  listen:
+    protocol: "tcp"
+    port: 443
+    tls:
+      cert: "/etc/ssl/certs/tls.crt"
+      key: "/etc/ssl/certs/tls.key"
+
+secrets:
+  tls:
+    name: "grpc-accounts-tls"
+    mountPath: "/etc/ssl/certs"
+    subject:
+      countries:
+        - NC
+      organizations:
+        - CSB
+      organizationalUnits:
+        - DSI
+      localities:
+        - Dumbéa
+    duration: 2160h
+    renewBefore: 360h
+    issuerRef:
+      name: selfsigned-issuer
+      kind: Issuer
+      group: cert-manager.io
+  users:
+    name: "grpc-accounts-users"
+    mountPath: "/app"
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: "grpc-accounts"
+
+podAnnotations:
+  reloader.stakater.com/auto: "true"
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  # The service type should always be ClusterIP
+  type: ClusterIP
+  port: 443
+
+resources:
+  limits:
+    cpu: 1000m
+    memory: 256Mi
+  requests:
+    cpu: 10m
+    memory: 32Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

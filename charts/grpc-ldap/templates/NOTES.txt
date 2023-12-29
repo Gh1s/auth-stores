@@ -1,0 +1,1 @@
+Access the gRPC by using the URL: https://{{ include "grpc-ldap.fullname" . }}

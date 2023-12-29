@@ -1,0 +1,91 @@
+tests:
+  users:
+    ldap:
+      authenticate:
+        cases:
+          - username: service.authtest
+            password: Lor49914
+            subject: 4e8b910b-c12f-49cd-abe7-ced2b6a8d6af
+            succeeded: true
+          - username: service.authtest
+            subject: ""
+            password: incorrect
+            succeeded: false
+      findClaims:
+        cases:
+          - identifier: 4e8b910b-c12f-49cd-abe7-ced2b6a8d6af
+            identifierType: 0
+            claims:
+              - sub
+              - given_name
+              - family_name
+              - name
+              - preferred_username
+              - email
+              - phone_number
+            values:
+              sub: 4e8b910b-c12f-49cd-abe7-ced2b6a8d6af
+              given_name: Service
+              family_name: Authtest
+              name: Authtest Service
+              email: service.authtest@csb.nc
+              phone_number: 46.30.30
+            succeeded: true
+          - identifier: service.authtest
+            identifierType: 1
+            succeeded: true
+            claims:
+              - sub
+              - given_name
+              - family_name
+              - name
+              - preferred_username
+              - email
+              - phone_number
+            values:
+              sub: 4e8b910b-c12f-49cd-abe7-ced2b6a8d6af
+              given_name: Service
+              family_name: Authtest
+              name: Authtest Service
+              email: service.authtest@csb.nc
+              phone_number: 46.30.30
+          - identifier: 5b943c36-51a2-c141-898f-0a1d6f70f0db
+            identifierType: 0
+            succeeded: false
+            claims: []
+            values:
+          - identifier: incorrect
+            identifierType: 1
+            succeeded: false
+            claims: []
+            values:
+      searchClaims:
+        cases:
+          - search: Authtest
+            claims:
+              - sub
+              - given_name
+              - family_name
+              - name
+              - preferred_username
+              - email
+              - phone_number
+            values:
+              - sub: 4e8b910b-c12f-49cd-abe7-ced2b6a8d6af
+                given_name: Service
+                family_name: Authtest
+                name: Authtest Service
+                email: service.authtest@csb.nc
+                phone_number: 46.30.30
+            succeeded: true
+          - search: NotFound
+            claims:
+              - sub
+              - given_name
+              - family_name
+              - name
+              - preferred_username
+              - email
+              - phone_number
+            values: []
+            succeeded: true

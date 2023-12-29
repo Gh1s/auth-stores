@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "grpc-accounts.fullname" . }}
+  labels:
+    {{- include "grpc-accounts.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "grpc-accounts.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "grpc-accounts.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "grpc-accounts.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+            - name: tls
+              mountPath: "{{ .Values.secrets.tls.mountPath }}/tls.crt"
+              subPath: tls.crt
+            - name: tls
+              mountPath: "{{ .Values.secrets.tls.mountPath }}/tls.key"
+              subPath: tls.key
+            - name: users
+              mountPath: "{{ .Values.secrets.users.mountPath }}/users.json"
+              subPath: users.json
+            - name: config
+              mountPath: "/app/config.{{ .Values.environment }}.yaml"
+              subPath: "config.{{ .Values.environment }}.yaml"
+          env:
+            - name: "ENVIRONMENT"
+              value: {{ .Values.environment }}
+          ports:
+            - name: https
+              containerPort: {{ .Values.grpc.listen.port }}
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: tls
+          secret:
+            secretName: {{ .Values.secrets.tls.name }}
+            items:
+              - key: tls.crt
+                path: tls.crt
+              - key: tls.key
+                path: tls.key
+        - name: users
+          secret:
+            secretName: {{ .Values.secrets.users.name }}
+            items:
+              - key: users.json
+                path: users.json
+        - name: config
+          configMap:
+            name: {{ include "grpc-accounts.fullname" . }}-config
+            items:
+              - key: "config.{{ .Values.environment }}.yaml"
+                path: "config.{{ .Values.environment }}.yaml"
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
